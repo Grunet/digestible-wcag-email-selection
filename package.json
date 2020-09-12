@@ -1,0 +1,15 @@
+{
+  "name": "digestible-wcag-email-selection",
+  "version": "0.0.1",
+  "description": "Decides which WCAG of the Day email should be sent each day",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Grunet/digestible-wcag-email-selection.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Grunet/digestible-wcag-email-selection/issues"
+  },
+  "homepage": "https://github.com/Grunet/digestible-wcag-email-selection#readme"
+}
