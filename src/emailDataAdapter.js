@@ -1,11 +1,12 @@
-const fetch = require("node-fetch");
-
 const pathToTemplates =
   "https://raw.githubusercontent.com/Grunet/digestible-wcag-sc-emails/master/dist/";
 const metadataFilename = "emailMetadata.json";
 
 class EmailDataAdapter {
-  constructor() {
+  constructor(inputs) {
+    const { networkAdapter } = inputs;
+    this.__networkAdapter = networkAdapter ?? new FetchAdapter();
+
     this.__cache = {};
   }
 
@@ -35,8 +36,9 @@ class EmailDataAdapter {
 
     const [emailHtml, emailPlainText] = await Promise.all(
       [htmlFilename, plainTextFilename].map(async function (filename) {
-        const res = await fetch(`${pathToTemplates}${filename}`);
-        return await res.text();
+        return await this.__networkAdapter.getTextFileContents(
+          `${pathToTemplates}${filename}`
+        );
       })
     );
 
@@ -50,8 +52,9 @@ class EmailDataAdapter {
 
   async __get__emailMetadata() {
     if (!this.__cache.emailMetadata) {
-      const metadataRes = await fetch(`${pathToTemplates}${metadataFilename}`);
-      const metadataObj = await metadataRes.json();
+      const metadataObj = await this.__networkAdapter.getJsonFileAsJsObj(
+        `${pathToTemplates}${metadataFilename}`
+      );
 
       this.__cache.emailMetadata = metadataObj;
     }
@@ -60,8 +63,26 @@ class EmailDataAdapter {
   }
 }
 
-function createEmailDataAdapter() {
-  return new EmailDataAdapter();
+class FetchAdapter {
+  constructor() {
+    this.__fetch = require("node-fetch");
+  }
+
+  async getTextFileContents(url) {
+    const res = await this.__fetch(url);
+    return await res.text();
+  }
+
+  async getJsonFileAsJsObj(url) {
+    const res = await this.__fetch(url);
+    return await res.json();
+  }
+}
+
+function createEmailDataAdapter(inputs) {
+  return new EmailDataAdapter({
+    networkAdapter: inputs?.dependencies?.networkAdapter,
+  });
 }
 
 module.exports = {

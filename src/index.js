@@ -8,14 +8,15 @@ const {
 const { changeAtRandom } = require("./selectionModifier.js");
 
 async function changeSelectedEmail(inputs) {
-  const emailDataAdapter =
-    inputs?.dependencies?.emailDataAdapter ?? createEmailDataAdapter();
-  const currentSelectionService =
-    inputs?.dependencies?.currentSelectionService ??
-    setupCurrentSelectionService();
-  const recentSelectionsService =
-    inputs?.dependencies?.recentSelectionService ??
-    setupRecentSelectionsService();
+  const emailDataAdapter = createEmailDataAdapter({
+    dependencies: inputs?.dependencies,
+  });
+  const currentSelectionService = setupCurrentSelectionService({
+    dependencies: inputs?.dependencies,
+  });
+  const recentSelectionsService = setupRecentSelectionsService({
+    dependencies: inputs?.dependencies,
+  });
 
   await changeAtRandom({
     withReplacement: false,
