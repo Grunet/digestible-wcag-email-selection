@@ -12,5 +12,8 @@
   "bugs": {
     "url": "https://github.com/Grunet/digestible-wcag-email-selection/issues"
   },
-  "homepage": "https://github.com/Grunet/digestible-wcag-email-selection#readme"
+  "homepage": "https://github.com/Grunet/digestible-wcag-email-selection#readme",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
 }
