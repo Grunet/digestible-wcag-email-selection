@@ -29,13 +29,12 @@ class EmailDataAdapter {
     }
 
     const {
-      id,
       filenames: { html: htmlFilename, plainText: plainTextFilename },
       subject,
     } = metadataOfMatchingEmail;
 
     const [emailHtml, emailPlainText] = await Promise.all(
-      [htmlFilename, plainTextFilename].map(async function (filename) {
+      [htmlFilename, plainTextFilename].map(async (filename) => {
         return await this.__networkAdapter.getTextFileContents(
           `${pathToTemplates}${filename}`
         );
