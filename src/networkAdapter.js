@@ -2,6 +2,7 @@ class NetworkAdapter {
   constructor() {
     this.__adapters = {
       fetch: new FetchAdapter(),
+      s3: new S3Adapter(),
     };
   }
 
@@ -11,7 +12,8 @@ class NetworkAdapter {
     let adapterInputs = [];
     switch (adapterKey) {
       case "fetch":
-        adapterInputs = [inputs.url];
+        const { url } = inputs;
+        adapterInputs = [url];
         break;
       default:
         throw new Error(
@@ -28,7 +30,12 @@ class NetworkAdapter {
     let adapterInputs = [];
     switch (adapterKey) {
       case "fetch":
-        adapterInputs = [inputs.url];
+        const { url } = inputs;
+        adapterInputs = [url];
+        break;
+      case "s3":
+        const { bucket, filename } = inputs;
+        adapterInputs = [{ bucket: bucket, key: filename }];
         break;
       default:
         throw new Error(
@@ -42,6 +49,10 @@ class NetworkAdapter {
   __getAdapterToUse(inputs) {
     if ("url" in inputs) {
       return { key: "fetch", adapter: this.__adapters.fetch };
+    }
+
+    if ("bucket" in inputs) {
+      return { key: "s3", adapter: this.__adapters.s3 };
     }
 
     throw new Error("Unrecognized inputs: ", inputs);
@@ -61,6 +72,33 @@ class FetchAdapter {
   async getJsonFileAsJsObj(url) {
     const res = await this.__fetch(url);
     return await res.json();
+  }
+}
+
+class S3Adapter {
+  constructor() {
+    const S3 = require("aws-sdk/clients/s3");
+    this.__s3 = new S3();
+  }
+
+  async getJsonFileAsJsObj(storageIdentifiers) {
+    const { bucket, key } = storageIdentifiers;
+
+    const res = await this.__s3
+      .getObject({
+        Bucket: bucket,
+        Key: key,
+      })
+      .promise();
+
+    const json = res?.Body?.toString();
+    if (!json) {
+      throw new Error("Response from AWS get request to S3 bucket was empty");
+    }
+
+    const jsObj = JSON.parse(json);
+
+    return jsObj;
   }
 }
 
