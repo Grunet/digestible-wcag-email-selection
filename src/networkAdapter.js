@@ -6,18 +6,34 @@ class NetworkAdapter {
   }
 
   async getTextFileContents(inputs) {
-    if ("url" in inputs) {
-      const { url } = inputs;
-      return await this.__adapters.fetch.getTextFileContents(url);
+    const adapter = this.__getAdapterToUse(inputs);
+
+    let adapterInputs = [];
+    switch (adapter) {
+      case this.__adapters.fetch:
+        adapterInputs = [inputs.url];
+        break;
     }
 
-    throw new Error("Unrecognized inputs: ", inputs);
+    return await adapter.getTextFileContents(...adapterInputs);
   }
 
   async getJsonFileAsJsObj(inputs) {
+    const adapter = this.__getAdapterToUse(inputs);
+
+    let adapterInputs = [];
+    switch (adapter) {
+      case this.__adapters.fetch:
+        adapterInputs = [inputs.url];
+        break;
+    }
+
+    return await adapter.getJsonFileAsJsObj(...adapterInputs);
+  }
+
+  __getAdapterToUse(inputs) {
     if ("url" in inputs) {
-      const { url } = inputs;
-      return await this.__adapters.fetch.getJsonFileAsJsObj(url);
+      return this.__adapters.fetch;
     }
 
     throw new Error("Unrecognized inputs: ", inputs);
