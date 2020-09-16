@@ -13,17 +13,17 @@ class EmailDataAdapter {
   }
 
   async getAllIds() {
-    const emailMetadata = await this.__get__emailMetadata();
+    const { emails: emailSpecificData } = await this.__get__emailMetadata();
 
-    const emailIds = emailMetadata["emails"].map((emailObj) => emailObj["id"]);
+    const emailIds = emailSpecificData.map((emailObj) => emailObj["id"]);
 
     return new Set(emailIds);
   }
 
   async getData(id) {
-    const emailMetadata = await this.__get__emailMetadata();
+    const { emails: emailSpecificData } = await this.__get__emailMetadata();
 
-    const metadataOfMatchingEmail = emailMetadata["emails"].find(
+    const metadataOfMatchingEmail = emailSpecificData.find(
       (emailObj) => emailObj["id"] === id
     );
     if (!metadataOfMatchingEmail) {
