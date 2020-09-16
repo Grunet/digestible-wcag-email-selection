@@ -46,6 +46,24 @@ class NetworkAdapter {
     return await adapter.getJsonFileAsJsObj(...adapterInputs);
   }
 
+  async setJsObjIntoJsonFile(inputs) {
+    const { adapter, key: adapterKey } = this.__getAdapterToUse(inputs);
+
+    let adapterInputs = [];
+    switch (adapterKey) {
+      case "s3":
+        const { bucket, filename, obj } = inputs;
+        adapterInputs = [{ bucket: bucket, key: filename }, obj];
+        break;
+      default:
+        throw new Error(
+          `${adapterKey}'s adapter hasn't been implemented yet for this method`
+        );
+    }
+
+    return await adapter.setJsObjIntoJsonFile(...adapterInputs);
+  }
+
   __getAdapterToUse(inputs) {
     if ("url" in inputs) {
       return { key: "fetch", adapter: this.__adapters.fetch };
@@ -99,6 +117,20 @@ class S3Adapter {
     const jsObj = JSON.parse(json);
 
     return jsObj;
+  }
+
+  async setJsObjIntoJsonFile(storageIdentifiers, jsObj) {
+    const { bucket, key } = storageIdentifiers;
+
+    const json = JSON.stringify(jsObj, null, 4);
+
+    await this.__s3
+      .putObject({
+        Bucket: bucket,
+        Key: key,
+        Body: json,
+      })
+      .promise(); //This does return a currently unused response object
   }
 }
 
