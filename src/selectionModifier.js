@@ -12,10 +12,10 @@ async function changeAtRandom(inputs) {
     },
   } = inputs;
 
-  const [setOfAllEmailIds, recentEmailSelections] = Promise.all(
+  const [setOfAllEmailIds, recentEmailSelections] = await Promise.all([
     getEmailIds(),
-    getAllRecentSelections()
-  );
+    getAllRecentSelections(),
+  ]);
 
   const allEmailIds = Array.from(setOfAllEmailIds);
   const recentEmailIds = recentEmailSelections.map((obj) => obj.id);
