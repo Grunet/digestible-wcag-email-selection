@@ -9,13 +9,21 @@ const { changeAtRandom } = require("./selectionModifier.js");
 
 async function changeSelectedEmail(inputs) {
   const emailDataAdapter = createEmailDataAdapter({
-    dependencies: inputs?.dependencies,
+    dependencies: inputs.dependencies,
   });
   const currentSelectionService = setupCurrentSelectionService({
-    dependencies: inputs?.dependencies,
+    dependencies: inputs.dependencies,
+    storageIds: {
+      bucket: inputs.s3.bucket.name,
+      filename: inputs.s3.bucket.filenames.currentSelection,
+    },
   });
   const recentSelectionsService = setupRecentSelectionsService({
-    dependencies: inputs?.dependencies,
+    dependencies: inputs.dependencies,
+    storageIds: {
+      bucket: inputs.s3.bucket.name,
+      filename: inputs.s3.bucket.filenames.recentSelections,
+    },
   });
 
   await changeAtRandom({

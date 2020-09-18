@@ -1,16 +1,11 @@
 const { createNetworkAdapter } = require("./networkAdapter.js");
 
-const defaulStorageIds = {
-  bucket: "digestible-wcag-email-selection",
-  filename: "recentSelections.json",
-};
-
 class RecentSelectionsProxy {
   constructor(inputs) {
     const { networkAdapter, storageIds } = inputs;
 
     this.__networkAdapter = networkAdapter ?? createNetworkAdapter();
-    this.__storageIds = Object.assign({ ...defaulStorageIds }, storageIds);
+    this.__storageIds = { ...storageIds };
   }
 
   async getAll() {
@@ -52,7 +47,7 @@ class RecentSelectionsProxy {
 function setupService(inputs) {
   return new RecentSelectionsProxy({
     networkAdapter: inputs?.dependencies?.networkAdapter,
-    storageIds: inputs?.storageIds,
+    storageIds: inputs.storageIds,
   });
 }
 
