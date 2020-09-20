@@ -8,23 +8,10 @@ const {
 const { changeAtRandom } = require("./selectionModifier.js");
 
 async function changeSelectedEmail(inputs) {
-  const emailDataAdapter = createEmailDataAdapter({
-    dependencies: inputs.dependencies,
-  });
-  const currentSelectionService = setupCurrentSelectionService({
-    dependencies: inputs.dependencies,
-    storageIds: {
-      bucket: inputs.s3.bucket.name,
-      filename: inputs.s3.bucket.filenames.currentSelection,
-    },
-  });
-  const recentSelectionsService = setupRecentSelectionsService({
-    dependencies: inputs.dependencies,
-    storageIds: {
-      bucket: inputs.s3.bucket.name,
-      filename: inputs.s3.bucket.filenames.recentSelections,
-    },
-  });
+  const { emailDataAdapter } = __setupAdapters(inputs);
+  const { currentSelectionService, recentSelectionsService } = __setupServices(
+    inputs
+  );
 
   await changeAtRandom({
     withReplacement: false,
@@ -45,6 +32,38 @@ async function changeSelectedEmail(inputs) {
       },
     },
   });
+}
+
+function __setupAdapters(inputs) {
+  const emailDataAdapter = createEmailDataAdapter({
+    dependencies: inputs.dependencies,
+  });
+
+  return {
+    emailDataAdapter: emailDataAdapter,
+  };
+}
+
+function __setupServices(inputs) {
+  const currentSelectionService = setupCurrentSelectionService({
+    dependencies: inputs.dependencies,
+    storageIds: {
+      bucket: inputs.s3.bucket.name,
+      filename: inputs.s3.bucket.filenames.currentSelection,
+    },
+  });
+  const recentSelectionsService = setupRecentSelectionsService({
+    dependencies: inputs.dependencies,
+    storageIds: {
+      bucket: inputs.s3.bucket.name,
+      filename: inputs.s3.bucket.filenames.recentSelections,
+    },
+  });
+
+  return {
+    currentSelectionService: currentSelectionService,
+    recentSelectionsService: recentSelectionsService,
+  };
 }
 
 module.exports = {
