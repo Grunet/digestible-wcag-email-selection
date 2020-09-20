@@ -4,6 +4,7 @@
   "description": "Decides which WCAG of the Day email should be sent each day",
   "main": "dist/index.js",
   "scripts": {
+    "test-integration": "jest --coverage --testMatch **\\test\\integration\\automated\\*_test.js",
     "test-e2e": "jest --coverage --testMatch **\\test\\e2e\\automated\\*_test.js"
   },
   "repository": {

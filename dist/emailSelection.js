@@ -11,6 +11,7 @@ async function getDataFromCurrentSelection(inputs) {
   } = inputs;
 
   return await setupService({
+    dependencies: inputs.dependencies,
     storageIds: {
       bucket: bucketName,
       filename: currentSelectionFilename,
