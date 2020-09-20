@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Decides which WCAG of the Day email should be sent each day",
   "main": "dist/index.js",
+  "scripts": {
+    "test-e2e": "jest --coverage --testMatch **\\test\\e2e\\automated\\*_test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Grunet/digestible-wcag-email-selection.git"
@@ -16,5 +19,8 @@
   "dependencies": {
     "aws-sdk": "^2.751.0",
     "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "jest": "^26.4.2"
   }
 }
