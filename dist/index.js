@@ -1,5 +1,9 @@
-const { changeSelectedEmail } = require("../src/index.js");
+const {
+  resetInputsToDefaults,
+  changeSelectedEmail,
+} = require("../src/index.js");
 
 module.exports = {
+  resetInputsToDefaults: resetInputsToDefaults,
   changeSelectedEmail: changeSelectedEmail,
 };

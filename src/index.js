@@ -7,6 +7,17 @@ const {
 } = require("./recentSelections.js");
 const { changeAtRandom } = require("./selectionModifier.js");
 
+async function resetInputsToDefaults(inputs) {
+  const { currentSelectionService, recentSelectionsService } = __setupServices(
+    inputs
+  );
+
+  await Promise.all([
+    currentSelectionService.set({}),
+    recentSelectionsService.clearAll(),
+  ]);
+}
+
 async function changeSelectedEmail(inputs) {
   const { emailDataAdapter } = __setupAdapters(inputs);
   const { currentSelectionService, recentSelectionsService } = __setupServices(
@@ -67,5 +78,6 @@ function __setupServices(inputs) {
 }
 
 module.exports = {
+  resetInputsToDefaults: resetInputsToDefaults,
   changeSelectedEmail: changeSelectedEmail,
 };
