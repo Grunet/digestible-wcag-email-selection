@@ -56,18 +56,30 @@ function __setupAdapters(inputs) {
 }
 
 function __setupServices(inputs) {
+  const {
+    s3: {
+      bucket: {
+        name: bucketName,
+        filenames: {
+          currentSelection: currentSelectionFilename,
+          recentSelections: recentSelectionsFilename,
+        },
+      },
+    },
+  } = inputs;
+
   const currentSelectionService = setupCurrentSelectionService({
     dependencies: inputs.dependencies,
     storageIds: {
-      bucket: inputs.s3.bucket.name,
-      filename: inputs.s3.bucket.filenames.currentSelection,
+      bucket: bucketName,
+      filename: currentSelectionFilename,
     },
   });
   const recentSelectionsService = setupRecentSelectionsService({
     dependencies: inputs.dependencies,
     storageIds: {
-      bucket: inputs.s3.bucket.name,
-      filename: inputs.s3.bucket.filenames.recentSelections,
+      bucket: bucketName,
+      filename: recentSelectionsFilename,
     },
   });
 
