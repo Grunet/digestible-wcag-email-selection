@@ -53,7 +53,7 @@ function __combineMockInputs(mockNetworkAdapter) {
 }
 
 describe("changeSelectedEmail", () => {
-  test("After the 2nd time an email is selected, all other emails will be selected once before that email is selected again", async () => {
+  test("Every email is guaranteed to be selected 2 times before any email is selected 3 times", async () => {
     //Arrange
     const mockNetworkAdapter = __createMockNetworkAdapter({
       emailMetadata: {
@@ -89,7 +89,7 @@ describe("changeSelectedEmail", () => {
     await resetInputsToDefaults(inputs);
 
     const selectedSubjects = [];
-    while (__getCountOfMostCommonElement(selectedSubjects) < 3) {
+    while (__getCountOfMostCommonElement(selectedSubjects) <= 2) {
       await changeSelectedEmail(inputs);
 
       const { subject } = await getDataFromCurrentSelection(inputs);
@@ -98,26 +98,22 @@ describe("changeSelectedEmail", () => {
     }
 
     //Assert
-    const subjectSelectedThreeTimes =
-      selectedSubjects[selectedSubjects.length - 1];
-    const indexOfItsSecondAppearance = selectedSubjects.lastIndexOf(
-      subjectSelectedThreeTimes,
-      -2
-    );
-    const subjectsSelectedInBetweenItsAppearances = selectedSubjects.slice(
-      indexOfItsSecondAppearance + 1,
-      -1
+    const previouslySelectedSubjects = selectedSubjects.slice(0, -1);
+    const countsOfPreviouslySelectedSubjects = __getCountsOfElements(
+      previouslySelectedSubjects
     );
 
-    expect(new Set(subjectsSelectedInBetweenItsAppearances).size).toBe(4 - 1);
+    expect(countsOfPreviouslySelectedSubjects).toEqual(Array(4).fill(2));
   });
 });
 
 // Helper functions
 function __getCountOfMostCommonElement(arr) {
-  return Math.max(
-    ...Array.from(new Set(arr)).map(
-      (val) => arr.filter((v) => v === val).length
-    )
+  return Math.max(...__getCountsOfElements(arr));
+}
+
+function __getCountsOfElements(arr) {
+  return Array.from(new Set(arr)).map(
+    (val) => arr.filter((v) => v === val).length
   );
 }
