@@ -45,6 +45,12 @@ async function changeSelectedEmail(inputs) {
   });
 }
 
+async function getDataFromCurrentSelection(inputs) {
+  const { currentSelectionService } = __setupServices(inputs);
+
+  return await currentSelectionService.get();
+}
+
 function __setupAdapters(inputs) {
   const emailDataAdapter = createEmailDataAdapter({
     dependencies: inputs.dependencies,
@@ -92,4 +98,5 @@ function __setupServices(inputs) {
 module.exports = {
   resetInputsToDefaults: resetInputsToDefaults,
   changeSelectedEmail: changeSelectedEmail,
+  getDataFromCurrentSelection: getDataFromCurrentSelection,
 };

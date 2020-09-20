@@ -1,10 +1,8 @@
 const {
   resetInputsToDefaults,
   changeSelectedEmail,
-} = require("../../../dist/index.js");
-const {
   getDataFromCurrentSelection,
-} = require("../../../dist/emailSelection.js");
+} = require("../../../dist/index.js");
 
 function __createMockNetworkAdapter(mockData) {
   return {

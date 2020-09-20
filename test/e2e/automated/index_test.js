@@ -1,10 +1,8 @@
 const {
   resetInputsToDefaults,
   changeSelectedEmail,
-} = require("../../../dist/index.js");
-const {
   getDataFromCurrentSelection,
-} = require("../../../dist/emailSelection.js");
+} = require("../../../dist/index.js");
 
 const S3 = require("aws-sdk/clients/s3");
 const s3Client = new S3();
