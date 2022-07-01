@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/Grunet/digestible-wcag-email-selection#readme",
   "dependencies": {
-    "aws-sdk": "^2.897.0",
+    "aws-sdk": "^2.1166.0",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
